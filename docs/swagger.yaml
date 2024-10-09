@@ -1,0 +1,331 @@
+definitions:
+  handler.Car:
+    properties:
+      car_id:
+        type: integer
+      name:
+        type: string
+      power:
+        type: string
+      type:
+        type: string
+      year:
+        type: integer
+    type: object
+  handler.Order:
+    properties:
+      car:
+        $ref: '#/definitions/handler.Car'
+      order_date:
+        type: string
+      order_id:
+        type: integer
+      user:
+        $ref: '#/definitions/handler.User'
+    type: object
+  handler.OrderInput:
+    properties:
+      car_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  handler.User:
+    properties:
+      age:
+        type: integer
+      first_name:
+        type: string
+      last_name:
+        type: string
+      user_id:
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: API documentation for test project
+  title: GoAPI test project
+  version: "1.0"
+paths:
+  /api/car/:
+    post:
+      consumes:
+      - application/json
+      description: add new car
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handler.Car'
+      summary: Add new car
+      tags:
+      - cars
+  /api/car/{carID}:
+    delete:
+      consumes:
+      - application/json
+      description: delete car by user id
+      parameters:
+      - description: Car ID
+        in: path
+        name: carID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Car'
+      summary: Delete car by id
+      tags:
+      - cars
+    get:
+      consumes:
+      - application/json
+      description: get car by id
+      parameters:
+      - description: car ID
+        in: path
+        name: carID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Car'
+      summary: Get car by id
+      tags:
+      - cars
+  /api/car/{userID}:
+    patch:
+      consumes:
+      - application/json
+      description: update car info by user id
+      parameters:
+      - description: Car ID
+        in: path
+        name: carID
+        required: true
+        type: string
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.Car'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handler.Car'
+      summary: Update car info by id
+      tags:
+      - cars
+  /api/car/get-all:
+    get:
+      consumes:
+      - application/json
+      description: get all cars
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Car'
+      summary: Get all cars
+      tags:
+      - cars
+  /api/orders/:
+    post:
+      consumes:
+      - application/json
+      description: create order
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.OrderInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handler.OrderInput'
+      summary: Create order
+      tags:
+      - orders
+  /api/orders/{orderID}:
+    delete:
+      consumes:
+      - application/json
+      description: delete order by user id
+      parameters:
+      - description: Order ID
+        in: path
+        name: orderID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Order'
+      summary: Delete order by id
+      tags:
+      - orders
+  /api/orders/{userID}:
+    get:
+      consumes:
+      - application/json
+      description: get order by user id
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Order'
+      summary: Get order by user id
+      tags:
+      - orders
+  /api/orders/get-all:
+    get:
+      consumes:
+      - application/json
+      description: get all orders
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Order'
+      summary: Get all orders
+      tags:
+      - orders
+  /api/user/:
+    post:
+      consumes:
+      - application/json
+      description: add user to the database
+      parameters:
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handler.User'
+      summary: Add new user
+      tags:
+      - users
+  /api/user/{userID}:
+    delete:
+      consumes:
+      - application/json
+      description: delete user info by user id
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.User'
+      summary: Delete user info by id
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: get user info by user id
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.User'
+      summary: Get user info by id
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: update user info by user id
+      parameters:
+      - description: User ID
+        in: path
+        name: userID
+        required: true
+        type: string
+      - description: body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handler.User'
+      summary: Update user info by id
+      tags:
+      - users
+  /api/user/get-all:
+    get:
+      consumes:
+      - application/json
+      description: get all users from database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.User'
+      summary: Get all users
+      tags:
+      - users
+swagger: "2.0"

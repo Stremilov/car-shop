@@ -23,6 +23,14 @@ type UserUpdate struct {
 	Age       *int    `json:"age,omitempty"`
 }
 
+// @Summary      Add new user
+// @Description  add user to the database
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param request body User true "body"
+// @Success      201  {object}  User
+// @Router       /api/user/ [post]
 func (h *Handler) addUser(ctx *gin.Context) {
 	var p User
 
@@ -42,6 +50,13 @@ func (h *Handler) addUser(ctx *gin.Context) {
 
 }
 
+// @Summary      Get all users
+// @Description  get all users from database
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  User
+// @Router       /api/user/get-all [get]
 func (h *Handler) getAllUsers(ctx *gin.Context) {
 	rows, err := db.Query("SELECT first_name, last_name, age FROM people")
 	if err != nil {
@@ -63,6 +78,15 @@ func (h *Handler) getAllUsers(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, people)
 }
 
+// @Summary      Update user info by id
+// @Description  update user info by user id
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        userID path string true "User ID"
+// @Param request body User true "body"
+// @Success      201  {object}  User
+// @Router       /api/user/{userID} [patch]
 func (h *Handler) updateUserInfoByID(ctx *gin.Context) {
 	userID := ctx.Param("userID")
 
@@ -111,6 +135,14 @@ func (h *Handler) updateUserInfoByID(ctx *gin.Context) {
 
 }
 
+// @Summary      Get user info by id
+// @Description  get user info by user id
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        userID path string true "User ID"
+// @Success      200  {object}  User
+// @Router       /api/user/{userID} [get]
 func (h *Handler) getUserByID(ctx *gin.Context) {
 	userID := ctx.Param("userID")
 
@@ -139,4 +171,38 @@ func (h *Handler) getUserByID(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, user)
+}
+
+// @Summary      Delete user info by id
+// @Description  delete user info by user id
+// @Tags         users
+// @Accept       json
+// @Produce      json
+// @Param        userID path string true "User ID"
+// @Success      200  {object}  User
+// @Router       /api/user/{userID} [delete]
+func (h *Handler) deleteUserByID(ctx *gin.Context) {
+	userID := ctx.Param("userID")
+
+	query := `DELETE FROM people WHERE id = $1`
+
+	result, err := db.Exec(query, userID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
+		return
+	}
+
+	if rowsAffected == 0 {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	ctx.Status(http.StatusOK)
+
 }
